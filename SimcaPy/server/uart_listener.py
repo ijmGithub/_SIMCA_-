@@ -2,14 +2,14 @@ import serial
 import time
 from mongodb_connection import MongoDBConnection
 
-# Especifica la ruta al archivo de configuración de MongoDB
+# Specify the path to the MongoDB configuration file
 mongod_conf_path = 'db/mongod.conf'
 
-# Crear una instancia de MongoDBConnection para establecer la conexión con MongoDB
+# Create an instance of MongoDBConnection to establish a connection to MongoDB
 mongo_connection = MongoDBConnection(host='192.168.0.157', port=27017, db_name='SimcaDatabase')
 mongo_connection.connect()  # Establecer la conexión con MongoDB
 
-# Configura el puerto serial
+# Configure the serial port
 ser = serial.Serial(
     port='/dev/ttyACM0',
     baudrate=9600 ,
@@ -20,49 +20,49 @@ ser = serial.Serial(
 )
 
 try:
-    # Bucle principal para escuchar y procesar datos desde el puerto serial
+    # Main loop to listen and process data from the serial port
     while True:
-        data = ser.readline().decode('ascii')  # Lee una línea desde el puerto serial
-        if data:  # Si la línea no está vacía, imprímela
+        data = ser.readline().decode('ascii')  # Read a line from the serial port
+        if data:  # If the line is not empty, print it
             print(data)
 
-        # Procesar los datos recibidos y agregarlos a la base de datos
+        # Process the received data and add it to the database
         if data:
-            # Identificar el tipo de datos en función del prefijo
+            # Identify the type of data based on the prefix
             if data.startswith("ADD_LIGHT_INTENSITY"):
-                # Datos de intensidad de luz
+                # Light intensity data
                 value = float(data.split(":")[1])
                 mongo_connection.add_light_intensity(value)
                 print("Intensidad de luz ambiental insertada correctamente en MongoDB")
             elif data.startswith("ADD_TEMPERATURE"):
-                # Datos de temperatura
+                # Temperature data
                 value = float(data.split(":")[1])
                 mongo_connection.add_temperature(value)
                 print("Temperatura insertada correctamente en MongoDB")
             elif data.startswith("ADD_GAS_CONCENTRATION"):
-                # Datos de concentración de gas
+                # Gas concentration data
                 value = float(data.split(":")[1])
                 mongo_connection.add_gas_concentration(value)
                 print("Concentración de gas insertada correctamente en MongoDB")
             elif data.startswith("ADD_DATE_TIME"):
-                # Obtener la fecha y hora actual
+                # Get the current date and time
                 value = float(data.split(":")[1])
                 mongo_connection.add_current_datetime(value)
                 print("Fecha y hora actual insertada correctamente en MongoDB")
             else:
                 print("Tipo de datos desconocido:", data)
 
-            # Imprimir los datos recibidos para propósitos de depuración
+            # Print the received data for debugging purposes
             print("Datos recibidos:", data)
 
-        # Esperar un breve periodo de tiempo antes de leer el próximo conjunto de datos
+        # Wait a short period of time before reading the next set of data
         time.sleep(0.1)
 
 except KeyboardInterrupt:
-    # Manejar la interrupción del teclado (Ctrl+C)
+     Handle keyboard interruption (Ctrl+C)
     print("Programa detenido por el usuario")
 
 finally:
-    # Cerrar el puerto serial y la conexión con la base de datos MongoDB
+    # Close the serial port and the MongoDB connection
     ser.close()
     mongo_connection.close()

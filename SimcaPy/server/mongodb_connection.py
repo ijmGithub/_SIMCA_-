@@ -2,14 +2,23 @@ import datetime
 from pymongo import MongoClient
 
 class MongoDBConnection:
+    /**
+     * @brief Initializes MongoDBConnection with host, port, and database name.
+     * @param host MongoDB server host address.
+     * @param port MongoDB server port.
+     * @param db_name MongoDB database name.
+     */
     def __init__(self, host='192.168.0.157', port=27017, db_name='SimcaDatabase'):
         self.host = host
         self.port = port
         self.db_name = db_name
         self.client = None
         self.db = None
-        self.max_count = 10  # Límite máximo de documentos
+        self.max_count = 10  # Maximum limit of documents
 
+    /**
+     * @brief Establishes a connection to MongoDB.
+     */
     def connect(self):
         try:
             self.client = MongoClient(self.host, self.port)
@@ -18,11 +27,17 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al conectar a MongoDB: {e}")
 
+    /**
+     * @brief Closes the connection to MongoDB.
+     */
     def close(self):
         if self.client:
             self.client.close()
 
-    # Método para insertar la intensidad de luz ambiental en la base de datos
+    /**
+     * @brief Inserts ambient light intensity into the database.
+     * @param value Ambient light intensity value.
+     */
     def add_light_intensity(self, value):
         try:
             collection = self.db['light_intensity_collection']
@@ -30,7 +45,10 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al insertar la intensidad de luz ambiental en MongoDB: {e}")
 
-    # Método para insertar datos del sensor en la base de datos
+    /**
+     * @brief Inserts sensor data into the database.
+     * @param data Sensor data.
+     */
     def add_sensor_data(self, data):
         try:
             collection = self.db['sensor_data_collection']
@@ -38,7 +56,10 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al insertar los datos del sensor en MongoDB: {e}")
 
-    # Método para insertar la temperatura en la base de datos
+    /**
+     * @brief Inserts temperature into the database.
+     * @param value Temperature value.
+     */
     def add_temperature(self, value):
         try:
             collection = self.db['temperature_collection']
@@ -46,7 +67,10 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al insertar la temperatura en MongoDB: {e}")
 
-    # Método para insertar la concentración de gas en la base de datos
+    /**
+     * @brief Inserts gas concentration into the database.
+     * @param value Gas concentration value.
+     */
     def add_gas_concentration(self, value):
         try:
             collection = self.db['gas_concentration_collection']
@@ -54,7 +78,10 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al insertar la concentración de gas en MongoDB: {e}")
  
-    # Método para insertar la fecha y hora actual en la base de datos
+    /**
+     * @brief Inserts current date and time into the database.
+     * @param value Current date and time value.
+     */
     def add_current_datetime(self, value):
         try:
             collection = self.db['datetime_collection']
@@ -62,7 +89,10 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al insertar la fecha y hora actual en MongoDB: {e}")
     
-    # Método para insertar la humedad en la base de datos
+    /**
+     * @brief Inserts humidity into the database.
+     * @param value Humidity value.
+     */
     def add_humidity(self, value):
         try:
             collection = self.db['humidity_collection']
@@ -70,7 +100,10 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al insertar la humedad en MongoDB: {e}")
     
-    # Método para insertar la presion en la base de datos
+    /**
+     * @brief Inserts pressure into the database.
+     * @param value Pressure value.
+     */
     def add_pressure(self, value):
         try:
             collection = self.db['pressure_collection']
@@ -78,25 +111,33 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al insertar la presión en MongoDB: {e}")
 
-    # Método para verificar y limitar la cantidad de documentos en una colección
+    /**
+     * @brief Checks and limits the number of documents in a collection.
+     * @param collection MongoDB collection.
+     * @param data Data to insert into the collection.
+     */
     def check_and_limit_documents(self, collection, data):
         count = collection.count_documents({})
         if count >= self.max_count:
-            # Si se alcanza el límite, se elimina el documento más antiguo
+            # If limit is reached, delete the oldest document
             oldest_document = collection.find_one_and_delete({}, sort=[('_id', 1)])
             print(f"Se ha eliminado el documento más antiguo: {oldest_document}")
 
-        # Inserta el nuevo documento
+        # Insert the new document
         collection.insert_one({'value': data})
         print("Dato insertado correctamente")            
     
+    /**
+     * @brief Retrieves ambient light intensity from the database.
+     * @return Ambient light intensity value or None if not found.
+     */    
     def get_light_intensity(self):
         try:
             if self.db is not None:
-                # Recupera la intensidad de luz ambiental desde la base de datos
+                # Retrieve ambient light intensity from the database
                 result = self.db['light_intensity_collection'].find_one()
                 if result:
-                    # Si se encuentra el documento, obtén el valor del campo 'value'
+                    # If document is found, get the value of 'value' field
                     light_intensity = result.get('value')
                     print(f"Intensidad de luz ambiental recuperada desde MongoDB: {light_intensity}")
                     return light_intensity
@@ -110,13 +151,17 @@ class MongoDBConnection:
             print(f"Error al obtener la intensidad de luz ambiental desde MongoDB: {e}")
             return None
 
+    /**
+     * @brief Retrieves current date and time from the database.
+     * @return Current date and time value or None if not found.
+     */
     def get_current_datetime(self):
         try:
             if self.db is not None:
-                # Recupera la fecha y hora actual desde la base de datos
+                # Retrieve current date and time from the database
                 result = self.db['datetime_collection'].find_one()
                 if result:
-                    # Si se encuentra el documento, obtén el valor del campo 'datetime'
+                    # If document is found, get the value of 'value' field
                     current_datetime = result.get('value')
                     print(f"Fecha y hora actual recuperadas desde MongoDB: {current_datetime}")
                     return current_datetime
@@ -130,7 +175,10 @@ class MongoDBConnection:
             print(f"Error al obtener la fecha y hora actual desde MongoDB: {e}")
             return None
 
-    # Método para obtener la temperatura desde la base de datos
+    /**
+     * @brief Retrieves temperature from the database.
+     * @return Temperature value or None if not found.
+     */
     def get_temperature(self):
         try:
             if self.db is not None:
@@ -152,16 +200,17 @@ class MongoDBConnection:
             return None
 
 
-  
-
-    # Método para obtener la concentración de gas desde la base de datos
+    /**
+     * @brief Retrieves gas concentration from the database.
+     * @return Gas concentration value or None if not found.
+     */
     def get_gas_concentration(self):
         try:
             if self.db is not None:
-                # Recupera la concentración de gas desde la base de datos
+                # Retrieve gas concentration from the database
                 result = self.db['gas_concentration_collection'].find_one()
                 if result:
-                    # Si se encuentra el documento, obtén el valor del campo 'value'
+                    # If document is found, get the value of 'value' field
                     gas_concentration = result.get('value')
                     print(f"Concentración de gas recuperada desde MongoDB: {gas_concentration}")
                     return gas_concentration
@@ -175,7 +224,10 @@ class MongoDBConnection:
             print(f"Error al obtener la concentración de gas desde MongoDB: {e}")
             return None
 
-
+    /**
+     * @brief Retrieves humidity from the database.
+     * @return Humidity value or None if not found.
+     */
     def get_humidity(self):
         try:
             if self.db is not None:
@@ -194,6 +246,10 @@ class MongoDBConnection:
             print(f"Error al obtener la humedad desde MongoDB: {e}")
             return None
 
+    /**
+     * @brief Retrieves pressure from the database.
+     * @return Pressure value or None if not found.
+     */
     def get_pressure(self):
         try:
             if self.db is not None:

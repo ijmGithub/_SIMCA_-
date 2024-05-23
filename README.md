@@ -1,2 +1,2 @@
-# _SIMCA_-
+# _SIMCA_
 Sistema Integrado para el Monitoreo y Control Ambiental

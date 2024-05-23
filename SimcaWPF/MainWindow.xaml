@@ -20,13 +20,13 @@
         <uc:BH1750View Grid.Row="0" x:Name="BH1750View" />
 
         <!-- Aquí se incluye BME280View en la segunda fila -->
-        <!-- <uc:BME280View Grid.Row="1" x:Name="BME280View" /> -->
+        <uc:BME280View Grid.Row="1" x:Name="BME280View" />
 
         <!-- Aquí se incluye DS3231View en la segunda fila -->
         <!-- <uc:DS3231View Grid.Row="2" x:Name="DS3231View" /> -->
 
         <!-- Aquí se incluye MAX31855View en la cuarta fila -->
-        <!-- <uc:MAX31855View Grid.Row="3" x:Name="MAX31855View" /> -->
+        <uc:MAX31855View Grid.Row="3" x:Name="MAX31855View" />
 
         <!-- Aquí se incluye MQ135View en la quinta fila -->
         <uc:MQ135View Grid.Row="4" x:Name="MQ135View" />      

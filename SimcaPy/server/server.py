@@ -54,19 +54,16 @@ while True:
             #light_intensity = random.randint(100, 1000)  # Valor aleatorio entre 100 y 1000 lux
             # Enviar la intensidad de luz ambiental al cliente
             client_socket.send(str(light_intensity).encode('ascii'))
-        elif data == "GET_SENSOR_DATA":  
-            # Obtener los datos del sensor desde la base de datos  
-            sensor_data = mongo_connection.get_sensor_data()         
-            # Simular la obtención de los datos del sensor BME280 (valores aleatorios)
-            # temperature = random.uniform(20.0, 30.0)  # Temperatura aleatoria entre 20.0 y 30.0 grados Celsius
-            # humidity = random.uniform(40.0, 60.0)  # Humedad relativa aleatoria entre 40.0 y 60.0 %
-            # pressure = random.uniform(1000.0, 1020.0)  # Presión aleatoria entre 1000.0 y 1020.0 hPa
-            # Enviar los datos del sensor BME280 al cliente
-            #sensor_data = f"{temperature},{humidity},{pressure}"
-            
-            # Convertir los datos del sensor a una cadena y enviarlos al cliente
-            sensor_data_str = ','.join(map(str, sensor_data.values()))
-            client_socket.send(sensor_data_str.encode('ascii'))
+        elif data == "GET_PRESSURE":
+            # Obtener la presión desde la base de datos
+            pressure = mongo_connection.get_pressure()
+            # Enviar la presión al cliente
+            client_socket.send(str(pressure).encode('ascii'))
+        elif data == "GET_HUMIDITY":
+            # Obtener la humedad desde la base de datos
+            humidity = mongo_connection.get_humidity()
+            # Enviar la humedad al cliente
+            client_socket.send(str(humidity).encode('ascii'))            
         elif data == "GET_DATE_TIME":
             # Obtener la fecha y hora actual desde la base de datos
             current_datetime = mongo_connection.get_current_datetime()

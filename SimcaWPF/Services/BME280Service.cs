@@ -55,6 +55,96 @@ namespace SimcaWPF.Services
             }
         }
 
+        // Método para obtener solo la temperatura del sensor BME280
+        public double GetTemperatureData()
+        {
+            try
+            {
+                string responseData = SendRequest("GET_TEMPERATURE");
+                if (double.TryParse(responseData, out double temperature))
+                {
+                    return temperature;
+                }
+                else
+                {
+                    throw new Exception("Respuesta no válida recibida del servidor.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener la temperatura del sensor BME280: {ex.Message}");
+                return double.NaN;
+            }
+        }
+
+        // Método para obtener solo la humedad del sensor BME280
+        public double GetHumidityData()
+        {
+            try
+            {
+                string responseData = SendRequest("GET_HUMIDITY");
+                if (double.TryParse(responseData, out double humidity))
+                {
+                    return humidity;
+                }
+                else
+                {
+                    throw new Exception("Respuesta no válida recibida del servidor.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener la humedad del sensor BME280: {ex.Message}");
+                return double.NaN;
+            }
+        }
+
+        // Método para obtener solo la presión del sensor BME280
+        public double GetPressureData()
+        {
+            try
+            {
+                string responseData = SendRequest("GET_PRESSURE");
+                if (double.TryParse(responseData, out double pressure))
+                {
+                    return pressure;
+                }
+                else
+                {
+                    throw new Exception("Respuesta no válida recibida del servidor.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al obtener la presión del sensor BME280: {ex.Message}");
+                return double.NaN;
+            }
+        }
+
+        // Método privado para enviar solicitudes al servidor y recibir la respuesta
+        private string SendRequest(string request)
+        {
+            try
+            {
+                using (TcpClient client = new TcpClient(serverIpAddress, serverPort))
+                using (NetworkStream stream = client.GetStream())
+                {
+                    // Envía una solicitud al servidor
+                    byte[] data = Encoding.ASCII.GetBytes(request);
+                    stream.Write(data, 0, data.Length);
+
+                    // Lee la respuesta del servidor
+                    byte[] responseBuffer = new byte[1024];
+                    int bytesRead = stream.Read(responseBuffer, 0, responseBuffer.Length);
+                    return Encoding.ASCII.GetString(responseBuffer, 0, bytesRead);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al enviar la solicitud al servidor: {ex.Message}");
+            }
+        }
+
         // Clase para representar los datos del sensor (temperatura, humedad y presión)
         public class SensorData
         {

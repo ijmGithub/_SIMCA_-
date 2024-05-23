@@ -16,5 +16,5 @@ c:\Users\ivan.jaraiz\Projects\SIMCA\SimcaWPF\App.xaml
 198155382431
 MainWindow.xaml;Views\BH1750View.xaml;Views\BME280View.xaml;Views\DS3231View.xaml;Views\MAX31855View.xaml;Views\MQ135View.xaml;
 
-True
+False
 

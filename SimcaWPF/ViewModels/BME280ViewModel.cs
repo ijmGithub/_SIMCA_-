@@ -75,10 +75,30 @@ namespace SimcaWPF.ViewModels
         // Método para actualizar los valores del sensor llamando al modelo
         public void UpdateSensorValues()
         {
-            var sensorData = _bme280Model.GetSensorData();
-            Temperature = sensorData.Temperature;
-            Humidity = sensorData.Humidity;
-            Pressure = sensorData.Pressure;
+            //UpdateTemperature();
+            UpdateHumidity();
+            UpdatePressure();
+        }
+
+        // Método para actualizar el valor de la temperatura
+        public void UpdateTemperature()
+        {
+            var tempData = _bme280Model.GetTemperatureData();
+            Temperature = tempData;
+        }
+
+        // Método para actualizar el valor de la humedad
+        public void UpdateHumidity()
+        {
+            var humidityData = _bme280Model.GetHumidityData();
+            Humidity = humidityData;
+        }
+
+        // Método para actualizar el valor de la presión
+        public void UpdatePressure()
+        {
+            var pressureData = _bme280Model.GetPressureData();
+            Pressure = pressureData;
         }
 
         // Implementación de la interfaz INotifyPropertyChanged para notificar cambios en las propiedades

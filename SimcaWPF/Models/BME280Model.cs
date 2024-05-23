@@ -19,5 +19,20 @@ namespace SimcaWPF.Models
             // Llamamos al método correspondiente del servicio para obtener los datos del sensor
             return _bme280Service.GetSensorData();
         }
+
+        public double GetTemperatureData()
+        {
+            return _bme280Service.GetTemperatureData();
+        }
+
+        public double GetHumidityData()
+        {
+            return _bme280Service.GetHumidityData();
+        }
+
+        public double GetPressureData()
+        {
+            return _bme280Service.GetPressureData();
+        }
     }
 }

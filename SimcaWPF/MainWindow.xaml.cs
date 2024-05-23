@@ -41,7 +41,7 @@ public partial class MainWindow : Window
 
         // Iniciar el bucle de actualización cada segundo
         // StartUpdatingLoop(bh1750View, bme280View, ds3231View, max31855View, mq135View);
-        StartUpdatingLoop(bh1750View, null, null, null, mq135View);
+        StartUpdatingLoop(bh1750View, bme280View, null, max31855View, mq135View);
     }
 
     // Método para iniciar el bucle de actualización

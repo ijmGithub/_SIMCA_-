@@ -34,12 +34,6 @@ try:
                 value = float(data.split(":")[1])
                 mongo_connection.add_light_intensity(value)
                 print("Intensidad de luz ambiental insertada correctamente en MongoDB")
-            elif data.startswith("ADD_SENSOR_DATA"):
-                # Datos del sensor
-                # Supongamos que los datos del sensor están en formato JSON
-                sensor_data = {"value": data.split(":")[1]}  # Aquí parsea el dato del sensor según su formato
-                mongo_connection.add_sensor_data(sensor_data)
-                print("Datos del sensor insertados correctamente en MongoDB")
             elif data.startswith("ADD_TEMPERATURE"):
                 # Datos de temperatura
                 value = float(data.split(":")[1])

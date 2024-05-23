@@ -57,11 +57,26 @@ class MongoDBConnection:
     # Método para insertar la fecha y hora actual en la base de datos
     def add_current_datetime(self, value):
         try:
-            collection = self.db['current_datetime_collection']
+            collection = self.db['datetime_collection']
             self.check_and_limit_documents(collection, value)
         except Exception as e:
             print(f"Error al insertar la fecha y hora actual en MongoDB: {e}")
-
+    
+    # Método para insertar la humedad en la base de datos
+    def add_humidity(self, value):
+        try:
+            collection = self.db['humidity_collection']
+            self.check_and_limit_documents(collection, value)
+        except Exception as e:
+            print(f"Error al insertar la humedad en MongoDB: {e}")
+    
+    # Método para insertar la presion en la base de datos
+    def add_pressure(self, value):
+        try:
+            collection = self.db['pressure_collection']
+            self.check_and_limit_documents(collection, value)
+        except Exception as e:
+            print(f"Error al insertar la presión en MongoDB: {e}")
 
     # Método para verificar y limitar la cantidad de documentos en una colección
     def check_and_limit_documents(self, collection, data):
@@ -95,37 +110,22 @@ class MongoDBConnection:
             print(f"Error al obtener la intensidad de luz ambiental desde MongoDB: {e}")
             return None
 
-
-    # Método para obtener los datos del sensor desde la base de datos
-    def get_sensor_data(self):
-        try:
-            # Aquí implementa la lógica para recuperar los datos del sensor desde la base de datos
-            # Por ejemplo:
-            # sensor_data = self.db['sensor_data_collection'].find_one()
-            # Donde 'sensor_data_collection' es el nombre de la colección donde se almacenan los datos del sensor.
-            # En este ejemplo, se supone que hay un solo documento en la colección que contiene los datos del sensor.
-            # Si necesitas lógica más compleja para recuperar estos datos, adapta este método según tus necesidades.
-            sensor_data = {
-                'temperature': 25.5,  # Ejemplo de temperatura
-                'humidity': 50.0,      # Ejemplo de humedad
-                'pressure': 1013.25   # Ejemplo de presión
-            }
-            return sensor_data
-        except Exception as e:
-            print(f"Error al obtener los datos del sensor desde MongoDB: {e}")
-            return None
-
-    # Método para obtener la fecha y hora actual desde la base de datos
     def get_current_datetime(self):
         try:
-            # Aquí implementa la lógica para recuperar la fecha y hora actual desde la base de datos
-            # Por ejemplo:
-            # current_datetime = self.db['datetime_collection'].find_one()['datetime']
-            # Donde 'datetime_collection' es el nombre de la colección donde se almacena la fecha y hora.
-            # En este ejemplo, se supone que hay un solo documento en la colección que contiene la fecha y hora.
-            # Si necesitas lógica más compleja para recuperar estos datos, adapta este método según tus necesidades.
-            current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            return current_datetime
+            if self.db is not None:
+                # Recupera la fecha y hora actual desde la base de datos
+                result = self.db['datetime_collection'].find_one()
+                if result:
+                    # Si se encuentra el documento, obtén el valor del campo 'datetime'
+                    current_datetime = result.get('value')
+                    print(f"Fecha y hora actual recuperadas desde MongoDB: {current_datetime}")
+                    return current_datetime
+                else:
+                    print("No se encontró ninguna fecha y hora en la base de datos.")
+                    return None
+            else:
+                print("Error en MongoDB: La conexión no está establecida.")
+                return None
         except Exception as e:
             print(f"Error al obtener la fecha y hora actual desde MongoDB: {e}")
             return None
@@ -133,18 +133,26 @@ class MongoDBConnection:
     # Método para obtener la temperatura desde la base de datos
     def get_temperature(self):
         try:
-            # Aquí implementa la lógica para recuperar la temperatura desde la base de datos
-            # Por ejemplo:
-            # temperature = self.db['temperature_collection'].find_one()['value']
-            # Donde 'temperature_collection' es el nombre de la colección donde se almacena la temperatura.
-            # 'value' es el campo que contiene el valor de la temperatura.
-            # En este ejemplo, se supone que hay un solo documento en la colección que contiene el valor de la temperatura.
-            temperature = 25.0  # Ejemplo de valor fijo            # Si necesitas lógica más compleja para recuperar estos datos, adapta este método según tus necesidades.
-
-            return temperature
+            if self.db is not None:
+                # Recupera la temperatura desde la base de datos
+                result = self.db['temperature_collection'].find_one()
+                if result:
+                    # Si se encuentra el documento, obtén el valor del campo 'value'
+                    temperature = result.get('value')
+                    print(f"Temperatura recuperada desde MongoDB: {temperature}")
+                    return temperature
+                else:
+                    print("No se encontró ninguna temperatura en la base de datos.")
+                    return None
+            else:
+                print("Error en MongoDB: La conexión no está establecida.")
+                return None
         except Exception as e:
             print(f"Error al obtener la temperatura desde MongoDB: {e}")
-            return None    
+            return None
+
+
+  
 
     # Método para obtener la concentración de gas desde la base de datos
     def get_gas_concentration(self):
@@ -166,11 +174,41 @@ class MongoDBConnection:
         except Exception as e:
             print(f"Error al obtener la concentración de gas desde MongoDB: {e}")
             return None
-       
 
-# Ejemplo de uso:
-# connection = MongoDBConnection(host='localhost', port=27017, db_name='mydatabase')
-# connection.connect()
-# light_intensity = connection.get_light_intensity()
-# print(f"Intensidad de luz ambiental: {light_intensity}")
-# connection.close()
+
+    def get_humidity(self):
+        try:
+            if self.db is not None:
+                result = self.db['humidity_collection'].find_one()
+                if result:
+                    humidity = result.get('value')
+                    print(f"Humedad recuperada desde MongoDB: {humidity}")
+                    return humidity
+                else:
+                    print("No se encontró ninguna humedad en la base de datos.")
+                    return None
+            else:
+                print("Error en MongoDB: La conexión no está establecida.")
+                return None
+        except Exception as e:
+            print(f"Error al obtener la humedad desde MongoDB: {e}")
+            return None
+
+    def get_pressure(self):
+        try:
+            if self.db is not None:
+                result = self.db['pressure_collection'].find_one()
+                if result:
+                    pressure = result.get('value')
+                    print(f"Presión recuperada desde MongoDB: {pressure}")
+                    return pressure
+                else:
+                    print("No se encontró ninguna presión en la base de datos.")
+                    return None
+            else:
+                print("Error en MongoDB: La conexión no está establecida.")
+                return None
+        except Exception as e:
+            print(f"Error al obtener la presión desde MongoDB: {e}")
+            return None
+

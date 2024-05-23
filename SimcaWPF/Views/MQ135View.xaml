@@ -1,0 +1,15 @@
+<UserControl x:Class="SimcaWPF.Views.MQ135View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10">
+            <TextBlock Text="Concentración de Gas (MQ135)" FontWeight="Bold" Margin="0 0 0 10"/>
+            <TextBlock Text="{Binding GasConcentration}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
